@@ -2,12 +2,15 @@ public class BinaryTree {
 
     Node root;
 
+    //adding new Node(value) to Tree
+    //no duplicates
     private Node addRecursion(Node current, int value){
-        if( current == null ){
+        if( current == null ){ //basecase
             return new Node(value);
         }
 
-        if( value < current.value ){
+        //conditions to choose subtrees  
+        if( value < current.value ){ 
             current.left = addRecursion(current.left, value );
         }else if( value > current.value){
             current.right = addRecursion(current.right, value);
@@ -16,11 +19,12 @@ public class BinaryTree {
         return current;
     }
 
+    //add values to  addRecursion (private) method 
     public void add(int value){
         root = addRecursion(root, value);
     }
 
-
+    //add elements to add method
     private BinaryTree createBinaryTree(){
 
         BinaryTree bt = new BinaryTree();
@@ -35,6 +39,7 @@ public class BinaryTree {
         return bt;
     }
 
+    //search given value from tree
     private boolean containsNodeRecursive(Node current, int value ){
 
         if( current == null ){
@@ -45,25 +50,39 @@ public class BinaryTree {
         return current.value > value ?  containsNodeRecursive(current.left,value):containsNodeRecursive(current.right,value);
     }
 
+    //ask to serch from tree 
     public boolean containNode(int value){
         return containsNodeRecursive(root,value);
     }
 
+    //delete values from tree
     private Node deleteRecursive(Node current, int value){
 
+        //basecase
         if(current == null){
             return null;
         }
 
         if( current.value == value ){
-
-            if(current.left == null && current.right == null){
+            /**
+            *3 points to consider : both sub trees can be null 
+            *                     : left or right sub tree can be null  
+            *                     : (MAIN POINT) Both sub trees have values   
+            **/
+            
+            if(current.left == null && current.right == null){ 
                 return null;
             }else if( current.left == null ){
                 return current.right;
             }else if ( current.right == null ){
                 return current.left;
             }else {
+                /**
+                *Get the right sub tree smallest value
+                *Assign it to the deleting node value 
+                *Remove the right sub tree smallest values   
+                **/
+                
                 int smallestValue = findSmallestValue(current.right);
                 current.value = smallestValue;
                 current.right = deleteRecursive(current.right, smallestValue);
